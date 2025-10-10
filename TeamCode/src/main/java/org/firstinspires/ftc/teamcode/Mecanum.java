@@ -18,5 +18,6 @@ public class Mecanum {
 
     void drive(boolean forward, boolean strafe, boolean turn) {
         // Put in the robot oriented driving here.
+        int lr = 0;
     }
 }
