@@ -21,6 +21,5 @@ public class Mecanum {
         int lf = 0;
         int rf = 0;
         int lb = 0;
-        int rb = 0;
     }
 }
