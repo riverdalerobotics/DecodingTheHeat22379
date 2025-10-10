@@ -20,5 +20,6 @@ public class Mecanum {
         // Put in the robot oriented driving here.
         int lf = 0;
         int rf = 0;
+        int lb = 0;
     }
 }
