@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "Basic TeleOp Program")
-public class TeleOp extends LinearOpMode {
+@TeleOp (name = "Basic TeleOp Program")
+public class TeleOpCode extends LinearOpMode {
     public DcMotor leftFront;
     public DcMotor rightFront;
     public DcMotor leftBack;
