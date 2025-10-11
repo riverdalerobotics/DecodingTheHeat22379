@@ -35,6 +35,8 @@ public class ChassisSubsystem {
         leftBackMotor.setPower(lb);
         rightFrontMotor.setPower(rf);
         rightBackMotor.setPower(rb);
+
+        currentSpeed = Math.min(max, 1.0);
     }
 
     // Probably want to have a slew rate function to avoid power overload
