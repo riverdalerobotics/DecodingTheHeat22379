@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Subsystems;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class ChassisSubsystem {
+public class ChassisSubsystem extends SubsystemBase {
     public DcMotor leftFrontMotor;
     public DcMotor rightFrontMotor;
     public DcMotor leftBackMotor;
@@ -17,7 +18,7 @@ public class ChassisSubsystem {
         this.rightBackMotor = rightBack;
     }
 
-    void drive(double speed, double strafe, double turn) {
+    public void drive(double speed, double strafe, double turn) {
         double rb = speed - turn + strafe;
         double lb = speed + turn - strafe;
         double rf = speed - turn - strafe;
