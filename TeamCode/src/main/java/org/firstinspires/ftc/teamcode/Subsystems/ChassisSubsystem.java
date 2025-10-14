@@ -3,12 +3,15 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+
 public class ChassisSubsystem extends SubsystemBase {
     public DcMotor leftFrontMotor;
     public DcMotor rightFrontMotor;
     public DcMotor leftBackMotor;
     public DcMotor rightBackMotor;
     private double currentSpeed = 0;
+    private Pose2D location;
 
     public ChassisSubsystem(DcMotor leftFront, DcMotor rightFront,
                             DcMotor leftBack, DcMotor rightBack) {
@@ -40,9 +43,7 @@ public class ChassisSubsystem extends SubsystemBase {
         currentSpeed = Math.min(max, 1.0);
     }
 
-    // Probably want to have a slew rate function to avoid power overload
-    // I don't really know if that is needed
-    void slewRateDrive() {
-
+    void setPosition (Pose2D location) {
+        this.location = location;
     }
 }
