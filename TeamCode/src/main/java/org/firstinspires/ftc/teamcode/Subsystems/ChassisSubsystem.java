@@ -10,8 +10,6 @@ public class ChassisSubsystem extends SubsystemBase {
     public DcMotor rightFrontMotor;
     public DcMotor leftBackMotor;
     public DcMotor rightBackMotor;
-    private double currentSpeed = 0;
-    private Pose2D location;
 
     public ChassisSubsystem(DcMotor leftFront, DcMotor rightFront,
                             DcMotor leftBack, DcMotor rightBack) {
@@ -39,11 +37,6 @@ public class ChassisSubsystem extends SubsystemBase {
         leftBackMotor.setPower(lb);
         rightFrontMotor.setPower(rf);
         rightBackMotor.setPower(rb);
-
-        currentSpeed = Math.min(max, 1.0);
     }
 
-    void setPosition (Pose2D location) {
-        this.location = location;
-    }
 }

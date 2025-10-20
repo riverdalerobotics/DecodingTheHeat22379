@@ -38,6 +38,7 @@ public class RobotContainer extends CommandOpMode {
     public void run() {
         // This is where we bind buttons to commands
         // This way of coding is better because it is more flexible
+        // Each of these
 
         chassis.setDefaultCommand(new RunCommand(() -> chassis.drive(
                 driveGamepad.getLeftY(),
