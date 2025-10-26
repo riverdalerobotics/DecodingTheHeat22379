@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class ShooterSubsystem extends SubsystemBase {
     public DcMotor flyWheel;
-    public ShooterSubsystem (DcMotor flyWheel) {
+    public Servo gatekeeper;
+    public ShooterSubsystem (DcMotor flyWheel, Servo gatekeeper) {
         this.flyWheel = flyWheel;
-        this.flyWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.gatekeeper = gatekeeper;
     }
 
     public void shoot () {

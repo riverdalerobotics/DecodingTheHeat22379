@@ -12,16 +12,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.Commands.ApriltagDriveToPosition;
+import org.firstinspires.ftc.teamcode.Constants.CameraConstants;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
-import org.firstinspires.ftc.teamcode.Constants.*;
 
 import java.util.List;
+import java.util.HashMap;
 
 public class VisionSubsystem extends SubsystemBase {
     VisionPortal portal;
@@ -48,7 +48,7 @@ public class VisionSubsystem extends SubsystemBase {
         apriltag = new AprilTagProcessor.Builder()
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .setOutputUnits(DistanceUnit.MM, AngleUnit.DEGREES)
                 .setCameraPose(cameraPosition, cameraOrientation)
                 .build();
 
@@ -88,8 +88,15 @@ public class VisionSubsystem extends SubsystemBase {
         return detections;
     }
 
-    public void runArtifactDetection(String[] motif) {
+    public HashMap<String, List<ColorBlobLocatorProcessor.Blob>> runArtifactDetection(String[] motif) {
+        List<ColorBlobLocatorProcessor.Blob> green = greenBalls.getBlobs();
+        List<ColorBlobLocatorProcessor.Blob> purple = purpleBalls.getBlobs();
 
+        HashMap<String, List<ColorBlobLocatorProcessor.Blob>> balls = new HashMap<>();
+        balls.put("Purple", purple);
+        balls.put("Green", green);
+
+        return balls;
     }
 
     public boolean inShootingPosition() {
