@@ -59,6 +59,7 @@ public class VisionSubsystem extends SubsystemBase {
                 .addProcessor(apriltag)
                 .setCameraResolution(new Size(640, 480))
                 .setCamera(webcam)
+                .enableLiveView(true)
                 .build();
     }
 
@@ -77,18 +78,12 @@ public class VisionSubsystem extends SubsystemBase {
                 .build();
     }
 
-    public List<AprilTagDetection> getDetections() {
+    public boolean getDetections() {
         List<AprilTagDetection> detections = apriltag.getDetections();
-
-        for (AprilTagDetection tag : detections) {
-            if (tag.metadata != null) {
-                telemetry.addData("Tag data", tag.metadata);
-            }
-        }
-        return detections;
+        return detections.size() > 0;
     }
 
-    public HashMap<String, List<ColorBlobLocatorProcessor.Blob>> runArtifactDetection(String[] motif) {
+    public HashMap<String, List<ColorBlobLocatorProcessor.Blob>> runArtifactDetection() {
         List<ColorBlobLocatorProcessor.Blob> green = greenBalls.getBlobs();
         List<ColorBlobLocatorProcessor.Blob> purple = purpleBalls.getBlobs();
 
