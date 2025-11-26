@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -17,6 +18,9 @@ public class ChassisSubsystem extends SubsystemBase {
         this.rightFrontMotor = rightFront;
         this.leftBackMotor = leftBack;
         this.rightBackMotor = rightBack;
+
+        this.leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+        this.leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void drive(double speed, double strafe, double turn) {
@@ -39,4 +43,24 @@ public class ChassisSubsystem extends SubsystemBase {
         rightBackMotor.setPower(rb);
     }
 
+    public void setDrivePower(Pose2d drivePower) {
+        double x = drivePower.getX();     // forward/backward
+        double y = drivePower.getY();     // strafe
+        double heading = drivePower.getHeading(); // rotation
+
+        double frontLeft = x + y + heading;
+        double frontRight = x - y - heading;
+        double backLeft = x - y + heading;
+        double backRight = x + y - heading;
+
+        // Normalize and set motor powers
+        double max = Math.max(1.0, Math.max(Math.abs(frontLeft),
+                Math.max(Math.abs(frontRight),
+                        Math.max(Math.abs(backLeft), Math.abs(backRight)))));
+
+        leftFrontMotor.setPower(frontLeft / max);
+        rightFrontMotor.setPower(frontRight / max);
+        leftBackMotor.setPower(backLeft / max);
+        rightBackMotor.setPower(backRight / max);
+    }
 }

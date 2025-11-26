@@ -39,6 +39,11 @@ public class RobotContainer extends CommandOpMode {
         rightBack = hardwareMap.get(DcMotor.class, "rightBackMotor");
         chassis = new ChassisSubsystem(leftFront, rightFront, leftBack, rightBack);
 
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 //        flyWheel = hardwareMap.get(DcMotor.class, "flywheel");
 //        gatekeeper = hardwareMap.get(Servo.class, "gatekeeper");
 //        shooter = new ShooterSubsystem(flyWheel, gatekeeper);

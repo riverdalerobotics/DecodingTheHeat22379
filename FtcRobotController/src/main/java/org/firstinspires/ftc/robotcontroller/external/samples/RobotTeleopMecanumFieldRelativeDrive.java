@@ -69,8 +69,6 @@ public class RobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         // We set the left motors in reverse which is needed for drive trains where the left
         // motors are opposite to the right ones.
-        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
 
@@ -84,13 +82,22 @@ public class RobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
     @Override
     public void loop() {
-        telemetry.addLine("Press A to reset Yaw");
-        telemetry.addLine("Hold left bumper to drive in robot relative");
-        telemetry.addLine("The left joystick sets the robot direction");
-        telemetry.addLine("Moving the right joystick left and right turns the robot");
+        telemetry.addLine(String.valueOf(frontLeftDrive.getCurrentPosition()));
+        telemetry.addLine(String.valueOf(frontRightDrive.getCurrentPosition()));
+        telemetry.addLine(String.valueOf(backLeftDrive.getCurrentPosition()));
+        telemetry.addLine(String.valueOf(backRightDrive.getCurrentPosition()));
+        telemetry.update();
+
+
 
         // If you press the A button, then you reset the Yaw to be zero from the way
         // the robot is currently pointing
+        if (gamepad1.aWasPressed()) {
+            frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
         // If you press the left bumper, you get a drive from the point of view of the robot
         // (much like driving an RC vehicle)
         drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);

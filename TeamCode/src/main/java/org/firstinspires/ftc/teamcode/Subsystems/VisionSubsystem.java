@@ -80,7 +80,11 @@ public class VisionSubsystem extends SubsystemBase {
 
     public boolean getDetections() {
         List<AprilTagDetection> detections = apriltag.getDetections();
-        return detections.size() > 0;
+        for (AprilTagDetection detection : detections) {
+            telemetry.addData("RobotPosition", String.valueOf(detection.robotPose));
+        }
+        telemetry.update();
+        return !detections.isEmpty();
     }
 
     public HashMap<String, List<ColorBlobLocatorProcessor.Blob>> runArtifactDetection() {
