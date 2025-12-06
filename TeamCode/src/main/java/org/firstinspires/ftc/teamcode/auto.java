@@ -1,16 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TankSubsystem;
 
-@TeleOp
-public class TestingShooter extends LinearOpMode {
+import java.util.Timer;
+
+@Autonomous
+public class auto extends LinearOpMode {
+
     DcMotor shooter;
     DcMotor leftMotor;
     DcMotor rightMotor;
@@ -21,7 +23,7 @@ public class TestingShooter extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         gatekeeper = hardwareMap.get(Servo.class, "gatekeeper");
-        
+
         shooter = hardwareMap.get(DcMotor.class, "shooter");
         shooterSubsystem = new ShooterSubsystem(shooter);
 
@@ -35,22 +37,13 @@ public class TestingShooter extends LinearOpMode {
         }
         waitForStart();
 
-        while (opModeIsActive()) {
-            if (gamepad1.aWasPressed()) {
-                shooterSubsystem.toggle();
-            }
-
-            if (gamepad1.b) {
-                gatekeeper.setPosition(0.1);
-            } else {
-                gatekeeper.setPosition(0.3);
-            }
-            telemetry.addData("Gatekeeper Position", gatekeeper.getPosition());
-            telemetry.update();
-
-            if (driving) {
-                chassis.drive(gamepad1.left_stick_y, gamepad1.right_stick_x);
-            }
-        }
+        chassis.drive(1, 0);
+        shooterSubsystem.shoot();
+        sleep(1700);
+        chassis.drive(0, 0);
+        sleep(1300);
+        gatekeeper.setPosition(0.1);
+        sleep(1500);
+        shooterSubsystem.stopShoot();
     }
 }

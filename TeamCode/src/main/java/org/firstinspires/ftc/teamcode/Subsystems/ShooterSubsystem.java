@@ -13,7 +13,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void shoot () {
-        flyWheel.setPower(1);
+        flyWheel.setPower(-1);
     }
 
     public void stopShoot () {

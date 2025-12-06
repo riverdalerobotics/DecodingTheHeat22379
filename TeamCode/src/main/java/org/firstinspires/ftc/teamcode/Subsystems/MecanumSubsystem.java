@@ -4,15 +4,13 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-
-public class ChassisSubsystem extends SubsystemBase {
+public class MecanumSubsystem extends SubsystemBase {
     public DcMotor leftFrontMotor;
     public DcMotor rightFrontMotor;
     public DcMotor leftBackMotor;
     public DcMotor rightBackMotor;
 
-    public ChassisSubsystem(DcMotor leftFront, DcMotor rightFront,
+    public MecanumSubsystem(DcMotor leftFront, DcMotor rightFront,
                             DcMotor leftBack, DcMotor rightBack) {
         this.leftFrontMotor = leftFront;
         this.rightFrontMotor = rightFront;
