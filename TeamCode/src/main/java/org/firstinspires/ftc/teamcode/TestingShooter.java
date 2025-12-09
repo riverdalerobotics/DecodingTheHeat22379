@@ -33,15 +33,28 @@ public class TestingShooter extends LinearOpMode {
 
             chassis = new TankSubsystem(leftMotor, rightMotor);
         }
-        waitForStart();
+        String color = "Red";
+
+        while (!opModeIsActive()) {
+            if (gamepad1.xWasPressed() && !isStopRequested()) {
+                color = (color.equals("Red")) ? "Blue" : "Red";
+            }
+            telemetry.addData("Alliance", color);
+        }
 
         while (opModeIsActive()) {
             if (gamepad1.aWasPressed()) {
                 shooterSubsystem.toggle();
+            } if (gamepad1.yWasPressed()) {
+                shooterSubsystem.faster();
+            } if (gamepad1.xWasPressed()) {
+                shooterSubsystem.slower();
+            } if (gamepad2.a) {
+
             }
 
             if (gamepad1.b) {
-                gatekeeper.setPosition(0.1);
+                gatekeeper.setPosition(0.13);
             } else {
                 gatekeeper.setPosition(0.3);
             }

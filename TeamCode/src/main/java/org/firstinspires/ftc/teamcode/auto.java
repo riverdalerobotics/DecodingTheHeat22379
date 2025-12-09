@@ -45,5 +45,8 @@ public class auto extends LinearOpMode {
         gatekeeper.setPosition(0.1);
         sleep(1500);
         shooterSubsystem.stopShoot();
+        chassis.drive(1, 0);
+        sleep(500);
+        chassis.drive(0, 0);
     }
 }
