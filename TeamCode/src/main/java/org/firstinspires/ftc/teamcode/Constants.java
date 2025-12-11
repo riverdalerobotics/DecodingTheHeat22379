@@ -19,4 +19,7 @@ public class Constants {
         {3657, 3657},
         {3657, 0}
     }; // This is the whole field, find actual numbers
+
+    public static final double servoClosedPosition = 1;
+    public static final double servoOpenPosition = 0.8;
 }

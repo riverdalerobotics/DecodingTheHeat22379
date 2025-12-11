@@ -3,19 +3,22 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TankSubsystem;
 
 @TeleOp
-public class TestingShooter extends LinearOpMode {
+public class ActualCode extends LinearOpMode {
     DcMotor shooter;
     DcMotor leftMotor;
     DcMotor rightMotor;
+    DcMotor intake1;
+    DcMotor intake2;
     TankSubsystem chassis;
     ShooterSubsystem shooterSubsystem;
+    IntakeSubsystem intakeSubsystem;
     Servo gatekeeper;
     boolean driving = true;
 
@@ -23,7 +26,12 @@ public class TestingShooter extends LinearOpMode {
         gatekeeper = hardwareMap.get(Servo.class, "gatekeeper");
         
         shooter = hardwareMap.get(DcMotor.class, "shooter");
-        shooterSubsystem = new ShooterSubsystem(shooter);
+        shooterSubsystem = new ShooterSubsystem(shooter, gatekeeper);
+
+        intake1 = hardwareMap.get(DcMotor.class, "intake1");
+        intake2 = hardwareMap.get(DcMotor.class, "intake2");
+
+        intakeSubsystem = new IntakeSubsystem(intake1, intake2);
 
         if (driving) {
             leftMotor = hardwareMap.get(DcMotor.class, "leftMotor");
@@ -43,22 +51,28 @@ public class TestingShooter extends LinearOpMode {
         }
 
         while (opModeIsActive()) {
-            if (gamepad1.aWasPressed()) {
+            if (gamepad2.aWasPressed()) {
                 shooterSubsystem.toggle();
-            } if (gamepad1.yWasPressed()) {
+            }
+            if (gamepad1.dpadUpWasPressed()) {
                 shooterSubsystem.faster();
-            } if (gamepad1.xWasPressed()) {
+            } if (gamepad1.dpadDownWasPressed()) {
                 shooterSubsystem.slower();
-            } if (gamepad2.a) {
-
+            }
+            if (gamepad2.left_trigger >= 0.5) {
+                intakeSubsystem.startManualIntake();
+            } else {
+                intakeSubsystem.stop();
             }
 
+            // Studica servos go in the opposite direction as Gobilda ones... Why???
             if (gamepad1.b) {
-                gatekeeper.setPosition(0.13);
+                gatekeeper.setPosition(Constants.servoClosedPosition);
             } else {
-                gatekeeper.setPosition(0.3);
+                gatekeeper.setPosition(Constants.servoOpenPosition);
             }
             telemetry.addData("Gatekeeper Position", gatekeeper.getPosition());
+            telemetry.addData("Motor Speed", shooterSubsystem.power);
             telemetry.update();
 
             if (driving) {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,10 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TankSubsystem;
 
-import java.util.Timer;
-
 @Autonomous
-public class auto extends LinearOpMode {
+public class Auto extends LinearOpMode {
 
     DcMotor shooter;
     DcMotor leftMotor;
@@ -25,7 +23,7 @@ public class auto extends LinearOpMode {
         gatekeeper = hardwareMap.get(Servo.class, "gatekeeper");
 
         shooter = hardwareMap.get(DcMotor.class, "shooter");
-        shooterSubsystem = new ShooterSubsystem(shooter);
+        shooterSubsystem = new ShooterSubsystem(shooter, gatekeeper);
 
         if (driving) {
             leftMotor = hardwareMap.get(DcMotor.class, "leftMotor");
@@ -35,14 +33,16 @@ public class auto extends LinearOpMode {
 
             chassis = new TankSubsystem(leftMotor, rightMotor);
         }
-        waitForStart();
 
+        // Reminds me of FLL
+        waitForStart();
+        shooterSubsystem.closeGate();
         chassis.drive(1, 0);
         shooterSubsystem.shoot();
         sleep(1700);
         chassis.drive(0, 0);
         sleep(1300);
-        gatekeeper.setPosition(0.1);
+        shooterSubsystem.openGate();
         sleep(1500);
         shooterSubsystem.stopShoot();
         chassis.drive(1, 0);
