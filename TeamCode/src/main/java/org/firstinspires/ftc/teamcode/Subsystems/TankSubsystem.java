@@ -13,8 +13,8 @@ public class TankSubsystem {
     }
 
     public void drive(double forward, double rotate) {
-        double leftPower = (forward + rotate);
-        double rightPower = (forward - rotate);
+        double leftPower = forward - rotate;
+        double rightPower = forward + rotate;
 
         double maxPower = Math.abs(leftPower);
         maxPower = Math.max(maxPower, Math.abs(rightPower));

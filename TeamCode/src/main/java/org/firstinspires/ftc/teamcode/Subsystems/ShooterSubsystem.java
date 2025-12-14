@@ -8,7 +8,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public DcMotor flyWheel;
     public Servo gatekeeper;
     public boolean isShooting = false;
-    public double power = 1;
+    public static double power = 1;
     public ShooterSubsystem (DcMotor flyWheel, Servo gatekeeper) {
         this.gatekeeper = gatekeeper;
         this.flyWheel = flyWheel;
@@ -23,14 +23,14 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void openGate() {
-        gatekeeper.setPosition(0.8);
-    }
-    public void closeGate() {
         gatekeeper.setPosition(1);
     }
+    public void closeGate() {
+        gatekeeper.setPosition(0.8);
+    }
 
-    public void faster() {power = Math.max(power - 0.05, -1); }
-    public void slower() {power = Math.min(power + 0.05, -0.5); }
+    public void faster() {power = Math.min(power + 0.05, 1); }
+    public void slower() {power = Math.max(power - 0.05, 0.5); }
 
     public void toggle() {
         if (isShooting) {

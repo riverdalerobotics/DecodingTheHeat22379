@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TankSubsystem;
 
 @Autonomous
-public class Auto extends LinearOpMode {
+public class BlueAuto extends LinearOpMode {
 
     DcMotor shooter;
     DcMotor leftMotor;
@@ -36,8 +36,9 @@ public class Auto extends LinearOpMode {
 
         // Reminds me of FLL
         waitForStart();
+        ShooterSubsystem.power = 0.9;
         shooterSubsystem.closeGate();
-        chassis.drive(1, 0);
+        chassis.drive(0.5, 0);
         shooterSubsystem.shoot();
         sleep(1700);
         chassis.drive(0, 0);
@@ -45,8 +46,12 @@ public class Auto extends LinearOpMode {
         shooterSubsystem.openGate();
         sleep(1500);
         shooterSubsystem.stopShoot();
-        chassis.drive(1, 0);
+        chassis.drive(-0.5, 0);
         sleep(500);
+        chassis.drive(0, -0.5);
+        sleep(400);
+        chassis.drive(-0.5, 0);
+        sleep(1000);
         chassis.drive(0, 0);
     }
 }
