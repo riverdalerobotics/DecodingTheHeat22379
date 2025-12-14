@@ -54,19 +54,27 @@ public class ActualCode extends LinearOpMode {
             if (gamepad2.aWasPressed()) {
                 shooterSubsystem.toggle();
             }
-            if (gamepad1.dpadUpWasPressed()) {
+            if (gamepad2.dpadUpWasPressed()) {
                 shooterSubsystem.faster();
-            } if (gamepad1.dpadDownWasPressed()) {
+                if (shooterSubsystem.isShooting) {
+                    shooterSubsystem.shoot();
+                }
+            } if (gamepad2.dpadDownWasPressed()) {
                 shooterSubsystem.slower();
+                if (shooterSubsystem.isShooting) {
+                    shooterSubsystem.shoot();
+                }
             }
             if (gamepad2.left_trigger >= 0.5) {
-                intakeSubsystem.startManualIntake();
+                intakeSubsystem.startIntake();
+            } else if (gamepad2.right_trigger >= 0.5) {
+                intakeSubsystem.reverseIntake();
             } else {
                 intakeSubsystem.stop();
             }
 
             // Studica servos go in the opposite direction as Gobilda ones... Why???
-            if (gamepad1.b) {
+            if (gamepad2.b) {
                 gatekeeper.setPosition(Constants.servoClosedPosition);
             } else {
                 gatekeeper.setPosition(Constants.servoOpenPosition);
