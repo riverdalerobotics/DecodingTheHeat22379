@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import androidx.annotation.Discouraged;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+// Do not use this class!
 public class MecanumSubsystem extends SubsystemBase {
     public DcMotor leftFrontMotor;
     public DcMotor rightFrontMotor;

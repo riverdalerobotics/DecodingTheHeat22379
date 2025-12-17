@@ -5,41 +5,49 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.TankSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.DriveSubsystem;
 
 @TeleOp
 public class ActualCode extends LinearOpMode {
     DcMotor shooter;
-    DcMotor leftMotor;
-    DcMotor rightMotor;
-    DcMotor intake1;
-    DcMotor intake2;
-    TankSubsystem chassis;
+    DcMotor leftMotor, rightMotor;
+    DcMotor leftFront, rightFront, leftBack, rightBack;
+    DcMotor intake;
+    DriveSubsystem chassis;
     ShooterSubsystem shooterSubsystem;
     IntakeSubsystem intakeSubsystem;
     Servo gatekeeper;
-    boolean driving = true;
 
     public void runOpMode() throws InterruptedException {
-        gatekeeper = hardwareMap.get(Servo.class, "gatekeeper");
+        gatekeeper = hardwareMap.get(Servo.class, Constants.Indexer);
         
-        shooter = hardwareMap.get(DcMotor.class, "shooter");
+        shooter = hardwareMap.get(DcMotor.class, Constants.Shooter);
         shooterSubsystem = new ShooterSubsystem(shooter, gatekeeper);
 
-        intake1 = hardwareMap.get(DcMotor.class, "intake1");
-        intake2 = hardwareMap.get(DcMotor.class, "intake2");
+        intake = hardwareMap.get(DcMotor.class, Constants.Intake);
 
-        intakeSubsystem = new IntakeSubsystem(intake1, intake2);
+        intakeSubsystem = new IntakeSubsystem(intake);
 
-        if (driving) {
-            leftMotor = hardwareMap.get(DcMotor.class, "leftMotor");
-            rightMotor = hardwareMap.get(DcMotor.class, "rightMotor");
+        if (!Constants.mecanum) {
+            leftMotor = hardwareMap.get(DcMotor.class, Constants.TankLeft);
+            rightMotor = hardwareMap.get(DcMotor.class, Constants.TankRight);
 
             leftMotor.setDirection(DcMotor.Direction.REVERSE);
 
-            chassis = new TankSubsystem(leftMotor, rightMotor);
+            chassis = new DriveSubsystem(leftMotor, rightMotor);
+        } else {
+            leftFront = hardwareMap.get(DcMotor.class, Constants.LeftFront);
+            rightFront = hardwareMap.get(DcMotor.class, Constants.RightFront);
+            leftBack = hardwareMap.get(DcMotor.class, Constants.LeftBack);
+            rightBack = hardwareMap.get(DcMotor.class, Constants.RightBack);
+
+            leftFront.setDirection(DcMotor.Direction.REVERSE);
+            leftBack.setDirection(DcMotor.Direction.REVERSE);
+
+            chassis = new DriveSubsystem(leftFront, rightFront, leftBack, rightBack);
         }
         String color = "Red";
 
@@ -83,9 +91,7 @@ public class ActualCode extends LinearOpMode {
             telemetry.addData("Motor Speed", shooterSubsystem.power);
             telemetry.update();
 
-            if (driving) {
-                chassis.drive(gamepad1.left_stick_y, gamepad1.right_stick_x);
-            }
+            chassis.drive(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
         }
     }
 }

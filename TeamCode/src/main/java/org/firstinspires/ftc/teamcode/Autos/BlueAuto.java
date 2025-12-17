@@ -5,53 +5,57 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Commands.AutoShoot2Balls;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.TankSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.DriveSubsystem;
 
 @Autonomous
 public class BlueAuto extends LinearOpMode {
 
     DcMotor shooter;
-    DcMotor leftMotor;
-    DcMotor rightMotor;
-    TankSubsystem chassis;
+    DcMotor leftMotor, rightMotor;
+    DcMotor leftFront, rightFront, leftBack, rightBack;
+    DriveSubsystem chassis;
     ShooterSubsystem shooterSubsystem;
     Servo gatekeeper;
-    boolean driving = true;
 
     public void runOpMode() throws InterruptedException {
-        gatekeeper = hardwareMap.get(Servo.class, "gatekeeper");
+        gatekeeper = hardwareMap.get(Servo.class, Constants.Indexer);
 
-        shooter = hardwareMap.get(DcMotor.class, "shooter");
+        shooter = hardwareMap.get(DcMotor.class, Constants.Shooter);
         shooterSubsystem = new ShooterSubsystem(shooter, gatekeeper);
 
-        if (driving) {
-            leftMotor = hardwareMap.get(DcMotor.class, "leftMotor");
-            rightMotor = hardwareMap.get(DcMotor.class, "rightMotor");
+        if (!Constants.mecanum) {
+            leftMotor = hardwareMap.get(DcMotor.class, Constants.TankLeft);
+            rightMotor = hardwareMap.get(DcMotor.class, Constants.TankRight);
 
             leftMotor.setDirection(DcMotor.Direction.REVERSE);
 
-            chassis = new TankSubsystem(leftMotor, rightMotor);
+            chassis = new DriveSubsystem(leftMotor, rightMotor);
+        } else {
+            leftFront = hardwareMap.get(DcMotor.class, Constants.LeftFront);
+            rightFront = hardwareMap.get(DcMotor.class, Constants.RightFront);
+            leftBack = hardwareMap.get(DcMotor.class, Constants.LeftBack);
+            rightBack = hardwareMap.get(DcMotor.class, Constants.RightBack);
+
+            leftFront.setDirection(DcMotor.Direction.REVERSE);
+            leftBack.setDirection(DcMotor.Direction.REVERSE);
+
+            chassis = new DriveSubsystem(leftFront, rightFront, leftBack, rightBack);
         }
+
+        AutoShoot2Balls autoShoot2Balls = new AutoShoot2Balls(shooterSubsystem, chassis);
 
         // Reminds me of FLL
         waitForStart();
-        ShooterSubsystem.power = 0.9;
-        shooterSubsystem.closeGate();
-        chassis.drive(0.5, 0);
-        shooterSubsystem.shoot();
-        sleep(1700);
-        chassis.drive(0, 0);
-        sleep(1300);
-        shooterSubsystem.openGate();
-        sleep(1500);
-        shooterSubsystem.stopShoot();
-        chassis.drive(-0.5, 0);
+        autoShoot2Balls.runOpMode();
+        chassis.drive(-0.5, 0, 0);
         sleep(500);
-        chassis.drive(0, -0.5);
+        chassis.drive(0, -0.5, 0);
         sleep(400);
-        chassis.drive(-0.5, 0);
+        chassis.drive(-0.5, 0, 0);
         sleep(1000);
-        chassis.drive(0, 0);
+        chassis.drive(0, 0, 0);
     }
 }

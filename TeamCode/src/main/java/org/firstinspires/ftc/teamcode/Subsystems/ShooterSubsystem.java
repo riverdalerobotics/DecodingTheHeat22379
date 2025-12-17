@@ -8,7 +8,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public DcMotor flyWheel;
     public Servo gatekeeper;
     public boolean isShooting = false;
-    public static double power = 1;
+    public double power = 1;
     public ShooterSubsystem (DcMotor flyWheel, Servo gatekeeper) {
         this.gatekeeper = gatekeeper;
         this.flyWheel = flyWheel;
