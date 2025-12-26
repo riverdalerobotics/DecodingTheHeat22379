@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Constants.IntakeConstants;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class  IntakeSubsystem extends SubsystemBase {
     public DcMotor intake;
     public IntakeSubsystem (DcMotor intake) {
         this.intake = intake;
@@ -14,6 +14,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public void startIntake() {
         // Have to check this
         intake.setPower(IntakeConstants.forward);
+    } public void startIntake(double power) {
+        intake.setPower(power * IntakeConstants.forward);
     }
 
     public void reverseIntake() {

@@ -33,10 +33,6 @@ public class VisionSubsystem extends SubsystemBase {
 
     // Declare the position of the camera on the robot
     // Needed for apriltag localization
-    private final Position cameraPosition = new Position(DistanceUnit.MM,
-            CameraConstants.x, CameraConstants.y, CameraConstants.z, 0); // Important! Find values for this and put in constants
-    private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
-            CameraConstants.yaw, CameraConstants.pitch, CameraConstants.roll, 0); // Important! Find these too
     public VisionSubsystem(WebcamName webcam, Telemetry telemetry) {
         this.telemetry = telemetry;
 
@@ -49,7 +45,6 @@ public class VisionSubsystem extends SubsystemBase {
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
                 .setOutputUnits(DistanceUnit.MM, AngleUnit.DEGREES)
-                .setCameraPose(cameraPosition, cameraOrientation)
                 .build();
 
         // Declare the camera

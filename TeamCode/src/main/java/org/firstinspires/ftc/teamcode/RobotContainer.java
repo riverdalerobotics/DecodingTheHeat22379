@@ -2,12 +2,16 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.RunCommand;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Subsystems.*;
+import org.firstinspires.ftc.teamcode.Constants.*;
+
 
 @TeleOp
 public class RobotContainer extends CommandOpMode {
@@ -17,39 +21,37 @@ public class RobotContainer extends CommandOpMode {
     DcMotor rightBack;
     DcMotor flyWheel;
     Servo gatekeeper;
-    DcMotor intake1;
-    DcMotor intake2;
+    DcMotor intake;
     GamepadEx driveGamepad;
     GamepadEx opGamepad;
-    public MecanumSubsystem chassis;
+    public DriveSubsystem chassis;
     public ShooterSubsystem shooter;
-    public IntakeSubsystem intake;
+    public IntakeSubsystem intakeSubsystem;
 
     @Override
     public void initialize() {
         // Put all of the things you want to initialize at the start of a match here
         // Like all hardware on a bot - motors, sensors, etc.
-        leftFront = hardwareMap.get(DcMotor.class, "leftFrontMotor");
-        rightFront = hardwareMap.get(DcMotor.class, "rightFrontMotor");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBackMotor");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBackMotor");
-        chassis = new MecanumSubsystem(leftFront, rightFront, leftBack, rightBack);
+        leftFront = hardwareMap.get(DcMotor.class, DriveConstants.LeftFront);
+        rightFront = hardwareMap.get(DcMotor.class, DriveConstants.RightFront);
+        leftBack = hardwareMap.get(DcMotor.class, DriveConstants.LeftBack);
+        rightBack = hardwareMap.get(DcMotor.class, DriveConstants.RightBack);
+        chassis = new DriveSubsystem(leftFront, rightFront, leftBack, rightBack);
 
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-//        flyWheel = hardwareMap.get(DcMotor.class, "flywheel");
-//        gatekeeper = hardwareMap.get(Servo.class, "gatekeeper");
-//        shooter = new ShooterSubsystem(flyWheel, gatekeeper);
-//
-//        intake1 = hardwareMap.get(DcMotor.class, "intake1");
-//        intake2 = hardwareMap.get(DcMotor.class, "intake2");
-//        intake = new IntakeSubsystem(intake1, intake2);
+        flyWheel = hardwareMap.get(DcMotor.class, Constants.Shooter);
+        gatekeeper = hardwareMap.get(Servo.class, Constants.Indexer);
+        shooter = new ShooterSubsystem(flyWheel, gatekeeper);
+
+        intake = hardwareMap.get(DcMotor.class, IntakeConstants.Intake);
+        intakeSubsystem = new IntakeSubsystem(intake);
 
         this.driveGamepad = new GamepadEx(gamepad1);
-//        this.opGamepad = new GamepadEx(gamepad2);
+        this.opGamepad = new GamepadEx(gamepad2);
     }
 
     @Override
@@ -62,13 +64,16 @@ public class RobotContainer extends CommandOpMode {
 
         chassis.setDefaultCommand(new RunCommand(() -> chassis.drive(
                 driveGamepad.getLeftY(),
-                driveGamepad.getLeftX(),
-                driveGamepad.getRightX()
+                driveGamepad.getRightX(),
+                driveGamepad.getLeftX()
         ), chassis));
 
-//        new GamepadButton(opGamepad, GamepadKeys.Button.A)
-//                .whenPressed(new RunCommand(() -> shooter.shoot(), shooter))
-//                .whenReleased(new RunCommand(() -> shooter.stopShoot(), shooter));
-//
+        new GamepadButton(opGamepad, GamepadKeys.Button.A)
+                .whenPressed(new RunCommand(() -> shooter.toggle(), shooter));
+
+        new GamepadButton(opGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)
+                .whenPressed(new RunCommand(() -> intakeSubsystem.startIntake(), intakeSubsystem))
+                .whenReleased(new RunCommand(() -> intakeSubsystem.stop(), intakeSubsystem));
+
     }
 }

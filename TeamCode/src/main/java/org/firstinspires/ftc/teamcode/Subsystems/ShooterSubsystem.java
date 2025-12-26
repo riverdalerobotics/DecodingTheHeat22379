@@ -4,6 +4,8 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Constants;
+
 public class ShooterSubsystem extends SubsystemBase {
     public DcMotor flyWheel;
     public Servo gatekeeper;
@@ -23,10 +25,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void openGate() {
-        gatekeeper.setPosition(1);
+        gatekeeper.setPosition(Constants.servoClosedPosition);
     }
     public void closeGate() {
-        gatekeeper.setPosition(0.8);
+        gatekeeper.setPosition(Constants.servoOpenPosition);
     }
 
     public void faster() {power = Math.min(power + 0.05, 1); }
