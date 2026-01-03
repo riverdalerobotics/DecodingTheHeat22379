@@ -42,4 +42,10 @@ public class OI{
     public Trigger rightTrigger(GamepadEx gamepad) {
         return new Trigger(() -> gamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1);
     }
+    public Button leftBumper(GamepadEx gamepad) {
+        return new GamepadButton(gamepad, GamepadKeys.Button.LEFT_BUMPER);
+    }
+    public Button rightBumper(GamepadEx gamepad) {
+        return new GamepadButton(gamepad, GamepadKeys.Button.RIGHT_BUMPER);
+    }
 }

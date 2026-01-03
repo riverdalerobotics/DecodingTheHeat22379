@@ -14,8 +14,12 @@ public class TurnToAngle extends CommandBase {
         this.chassis = chassis;
         this.targetAngle = angle;
 
-        endTime = System.currentTimeMillis() + timeLimit;
         addRequirements(chassis);
+    }
+
+    @Override
+    public void initialize() {
+        endTime = System.currentTimeMillis() + timeLimit;
     }
 
     @Override

@@ -93,31 +93,20 @@ public class RobotContainer extends CommandOpMode {
                 driveGamepad::getLeftX
         );
         pointForward = new TurnToAngle(chassis, 0);
-        pointRight = new TurnToAngle(chassis, 90);
-        pointLeft = new TurnToAngle(chassis, -90);
+        pointRight = new TurnToAngle(chassis, -90);
+        pointLeft = new TurnToAngle(chassis, 90);
         pointBackward = new TurnToAngle(chassis, 180);
 
         register(chassis, shooter, intakeSubsystem, vision);
-        schedule(adjustPower);
         limelight.start();
-    }
 
-    @Override
-    public void run() {
-        super.run();
-        // This is where we bind buttons to commands
-        // This way of coding is better because it is more flexible
-        // Each of these
-        chassis.setDefaultCommand(new RunCommand(() -> chassis.drive(
-                driveGamepad.getLeftY(),
-                driveGamepad.getRightX(),
-                driveGamepad.getLeftX()
-        ), chassis));
+        oi.a(opGamepad).whenPressed(new InstantCommand(() -> shooter.toggle(), shooter));
 
         intakeSubsystem.setDefaultCommand(new RunCommand(() -> intakeSubsystem.stop(), intakeSubsystem));
 
         oi.x(driveGamepad).whenReleased(toggleSlowMode);
-        oi.a(opGamepad).whenPressed(new InstantCommand(() -> shooter.toggle(), shooter));
+        oi.b(opGamepad).whenPressed(new RunCommand(() -> shooter.openGate(), shooter))
+                .whenReleased(new RunCommand(() -> shooter.closeGate(), shooter));
 
         oi.dpadUp(driveGamepad).whenPressed(pointForward);
         oi.dpadDown(driveGamepad).whenPressed(pointBackward);
@@ -126,9 +115,29 @@ public class RobotContainer extends CommandOpMode {
         oi.dpadUp(opGamepad).whenPressed(new InstantCommand(() -> shooter.faster(), shooter));
         oi.dpadDown(opGamepad).whenPressed(new InstantCommand(() -> shooter.slower(), shooter));
 
-        oi.leftTrigger(opGamepad).whenActive(new RunCommand(() -> intakeSubsystem.startIntake(), intakeSubsystem));
-        oi.rightTrigger(opGamepad).whenActive(new RunCommand(() -> intakeSubsystem.reverseIntake(), intakeSubsystem));
+        oi.leftTrigger(opGamepad).whenActive(new RunCommand(() -> intakeSubsystem.startIntake(), intakeSubsystem))
+                .whenInactive(new InstantCommand(() -> intakeSubsystem.stop(), intakeSubsystem));
+        oi.rightTrigger(opGamepad).whileActiveContinuous(new InstantCommand(() -> intakeSubsystem.reverseIntake(), intakeSubsystem))
+                .whenInactive(new InstantCommand(() -> intakeSubsystem.stop(), intakeSubsystem));
 
-        oi.leftTrigger(driveGamepad).whenActive(lookToTag);
+        oi.rightBumper(driveGamepad).whenReleased(new InstantCommand(() -> chassis.resetYaw()));
+
+        chassis.setDefaultCommand(new RunCommand(() -> chassis.drive(
+                driveGamepad.getLeftY(),
+                driveGamepad.getRightX(),
+                driveGamepad.getLeftX()
+        ), chassis));
+
+        oi.leftTrigger(driveGamepad).whileActiveOnce(lookToTag);
+        oi.leftTrigger(driveGamepad).whileActiveOnce(adjustPower);
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        // Do NOT put anything in here unless you know what you are doing
+        // Except telemetry
+        telemetry.addData("Power", shooter.power);
+        telemetry.update();
     }
 }
