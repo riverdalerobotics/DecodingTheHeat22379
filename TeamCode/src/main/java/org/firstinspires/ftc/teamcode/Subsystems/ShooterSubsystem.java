@@ -18,21 +18,24 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void shoot () {
         flyWheel.setPower(power);
+        isShooting = true;
     }
 
     public void stopShoot () {
         flyWheel.setPower(0);
+        isShooting = false;
     }
 
     public void openGate() {
-        gatekeeper.setPosition(Constants.servoClosedPosition);
+        gatekeeper.setPosition(Constants.ShooterConstants.servoClosedPosition);
     }
     public void closeGate() {
-        gatekeeper.setPosition(Constants.servoOpenPosition);
+        gatekeeper.setPosition(Constants.ShooterConstants.servoOpenPosition);
     }
 
-    public void faster() {power = Math.min(power + 0.05, 1); }
-    public void slower() {power = Math.max(power - 0.05, 0.5); }
+    public void faster() { power = Math.min(power + 0.05, 1); }
+    public void slower() { power = Math.max(power - 0.05, 0.5); }
+    public void setPower(double power) { this.power = Math.max(-1, Math.min(power, 1));}
 
     public void toggle() {
         if (isShooting) {
@@ -40,6 +43,5 @@ public class ShooterSubsystem extends SubsystemBase {
         } else {
             shoot();
         }
-        isShooting = !isShooting;
     }
 }

@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Commands.AutoShoot2Balls;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.Constants.*;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.DriveSubsystem;
@@ -28,9 +29,9 @@ public class RedAuto extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         // Initialization code: put at the start of every runOpMode
-        gatekeeper = hardwareMap.get(Servo.class, Constants.Indexer);
+        gatekeeper = hardwareMap.get(Servo.class, ShooterConstants.Indexer);
 
-        shooter = hardwareMap.get(DcMotor.class, Constants.Shooter);
+        shooter = hardwareMap.get(DcMotor.class, ShooterConstants.Shooter);
         shooterSubsystem = new ShooterSubsystem(shooter, gatekeeper);
 
         imu = hardwareMap.get(IMU.class, Constants.IMU);
@@ -52,8 +53,6 @@ public class RedAuto extends LinearOpMode {
             rightFront = hardwareMap.get(DcMotor.class, Constants.DriveConstants.RightFront);
             leftBack = hardwareMap.get(DcMotor.class, Constants.DriveConstants.LeftBack);
             rightBack = hardwareMap.get(DcMotor.class, Constants.DriveConstants.RightBack);
-
-            leftBack.setDirection(DcMotor.Direction.REVERSE);
 
             chassis = new DriveSubsystem(leftFront, rightFront, leftBack, rightBack);
             chassis.setUpIMU(imu);

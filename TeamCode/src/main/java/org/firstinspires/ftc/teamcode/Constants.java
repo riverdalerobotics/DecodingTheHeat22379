@@ -20,6 +20,15 @@ public class Constants {
     @Configurable
     public static class CameraConstants {
         public static double P = 0.02;
+        public static double verticalFOV = 42;
+        public static double horizontalFOV = 54.5;
+        public static double verticalPixelCount = 480;
+        public static double horizontalPixelCount = 640;
+        public static double vertPixelPerDeg = verticalPixelCount / verticalFOV;
+        public static double horPixelPerDeg = horizontalPixelCount / horizontalFOV;
+        public static double pitch = Math.toRadians(16);
+        public static double height = 17.4;
+        public static double apriltagHeight = 30*2.54;
     }
 
     @Configurable
@@ -29,8 +38,6 @@ public class Constants {
 
         public static String Intake = "I";
     }
-
-    public static String Shooter = "S";
 
     @Configurable
     public static class DriveConstants {
@@ -46,7 +53,19 @@ public class Constants {
         public static double forwardStallSpeed = 0.2;
         public static double angleThreshold = 30;
     }
-    public static String Indexer = "gatekeeper";
+
+    @Configurable
+    public static class ShooterConstants {
+        public static String Shooter = "S";
+        public static String Indexer = "gatekeeper";
+
+        public static final double servoClosedPosition = 0.95;
+        public static final double servoOpenPosition = 0.8;
+        public static double distanceModifier = 0.0012;
+        public static double batteryModifier = 0.03;
+        public static double startingPower = 0.83;
+    }
+
     public static String Limelight = "limelight";
     public static String IMU = "imu";
 
@@ -57,9 +76,6 @@ public class Constants {
         {3657, 3657},
         {3657, 0}
     }; // This is the whole field, find actual numbers
-
-    public static final double servoClosedPosition = 0.95;
-    public static final double servoOpenPosition = 0.8;
 
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(5); // NOT CORRECT!

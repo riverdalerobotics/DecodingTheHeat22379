@@ -9,10 +9,10 @@ import org.firstinspires.ftc.teamcode.Constants.*;
 
 public class DriveSubsystem extends SubsystemBase {
 
-    public DcMotor leftMotor, rightMotor;
-    public DcMotor leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor;
-    public DcMotor[] motors;
-    public IMU imu;
+    DcMotor leftMotor, rightMotor;
+    DcMotor leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor;
+    DcMotor[] motors;
+    IMU imu;
     double currentYaw;
     double slowMode = 1;
     public String color = "Blue";
@@ -34,7 +34,6 @@ public class DriveSubsystem extends SubsystemBase {
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors = new DcMotor[]{leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor};
 
-        this.leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
     }
     public void setUpIMU(IMU imu) {
         this.imu = imu;
@@ -140,7 +139,6 @@ public class DriveSubsystem extends SubsystemBase {
         }
     }
 
-
     public void strafeByTicks(int ticks) {
         // Record the starting tick count for each motor.
         int[] startTicks = {
@@ -217,7 +215,6 @@ public class DriveSubsystem extends SubsystemBase {
             drive(0, 0, 0);
         }
     }
-    // In DriveSubsystem.java
 
     public void rotateToAngle(double targetAngle) {
         // Ensure targetAngle is within a standard -180 to 180 range if needed,
@@ -307,4 +304,10 @@ public class DriveSubsystem extends SubsystemBase {
         holdHeading(200); // Hold for 200 milliseconds
     }
 
+    public double getYaw() {
+        return imu.getRobotYawPitchRollAngles().getYaw();
+    }
+    public void resetYaw() {
+        imu.resetYaw();
+    }
 }

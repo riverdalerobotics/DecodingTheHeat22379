@@ -23,7 +23,7 @@ public class AutoShoot2Balls {
 
     public void runOpMode() throws InterruptedException {
         shooter.power = 1;
-        tank.imu.resetYaw();
+        tank.resetYaw();
         shooter.shoot();
         tank.forwardByTicks(-1100);
         sleep(1500);

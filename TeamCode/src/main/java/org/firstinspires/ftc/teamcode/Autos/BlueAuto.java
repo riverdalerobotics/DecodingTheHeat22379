@@ -28,9 +28,9 @@ public class BlueAuto extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         // Initialization code: put at the start of every runOpMode
-        gatekeeper = hardwareMap.get(Servo.class, Constants.Indexer);
+        gatekeeper = hardwareMap.get(Servo.class, Constants.ShooterConstants.Indexer);
 
-        shooter = hardwareMap.get(DcMotor.class, Constants.Shooter);
+        shooter = hardwareMap.get(DcMotor.class, Constants.ShooterConstants.Shooter);
         shooterSubsystem = new ShooterSubsystem(shooter, gatekeeper);
 
         imu = hardwareMap.get(IMU.class, Constants.IMU);
@@ -52,8 +52,6 @@ public class BlueAuto extends LinearOpMode {
             rightFront = hardwareMap.get(DcMotor.class, Constants.DriveConstants.RightFront);
             leftBack = hardwareMap.get(DcMotor.class, Constants.DriveConstants.LeftBack);
             rightBack = hardwareMap.get(DcMotor.class, Constants.DriveConstants.RightBack);
-
-            leftBack.setDirection(DcMotor.Direction.REVERSE);
 
             chassis = new DriveSubsystem(leftFront, rightFront, leftBack, rightBack);
             chassis.setUpIMU(imu);
