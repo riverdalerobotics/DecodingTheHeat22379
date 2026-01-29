@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Constants.*;
 
@@ -53,7 +54,7 @@ public class DriveSubsystem extends SubsystemBase {
             rightMotor.setPower(rightPower * Math.abs(rightPower) / maxPower);
         } else {
             if (rotate == 0) {
-                // Here we need to add a rotation factor based on how much we deviated from our angle
+               //  Here we need to add a rotation factor based on how much we deviated from our angle
                 double deltaYaw = imu.getRobotYawPitchRollAngles().getYaw() - currentYaw;
                 if (Math.abs(deltaYaw) <= DriveConstants.angleThreshold) {
                     rotate = deltaYaw * DriveConstants.autoTurnP;
@@ -81,6 +82,23 @@ public class DriveSubsystem extends SubsystemBase {
             rightFrontMotor.setPower(rf / slowMode);
             rightBackMotor.setPower(rb / slowMode);
         }
+    }
+
+    public void driveFieldRelative(double forward, double rotate, double right) {
+        // First, convert direction being asked to drive to polar coordinates
+        double theta = Math.atan2(forward, right);
+        double r = Math.hypot(right, forward);
+
+        // Second, rotate angle by the angle the robot is pointing
+        theta = AngleUnit.normalizeRadians(theta -
+                imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+
+        // Third, convert back to cartesian
+        double newForward = r * Math.sin(theta);
+        double newRight = r * Math.cos(theta);
+
+        // Finally, call the drive method with robot relative forward and right amounts
+        drive(newForward, rotate, newRight);
     }
 
     public void toggleSlowMode() {
@@ -220,8 +238,6 @@ public class DriveSubsystem extends SubsystemBase {
         // Ensure targetAngle is within a standard -180 to 180 range if needed,
         // although the math below handles it.
 
-        // Smallest power to apply to overcome static friction and ensure the robot moves.
-
         while (true) {
             // 1. GET THE LATEST ANGLE READING INSIDE THE LOOP
             // The IMU returns angles in the range of -180 to 180 degrees.
@@ -238,6 +254,7 @@ public class DriveSubsystem extends SubsystemBase {
 
             // 3. CHECK IF WE HAVE REACHED THE TARGET
             // Exit the loop if we are within the acceptable tolerance.
+
             if (Math.abs(error) <= 1.0) {
                 break; // Exit the loop
             }

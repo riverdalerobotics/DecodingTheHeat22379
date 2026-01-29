@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.DriveSubsystem;
 public class TurnToAngle extends CommandBase {
     DriveSubsystem chassis;
     double targetAngle;
+    public double error;
     int timeLimit = 3000;
     long endTime;
     public TurnToAngle(DriveSubsystem chassis, double angle) {
@@ -25,7 +26,7 @@ public class TurnToAngle extends CommandBase {
     @Override
     public void execute() {
         double currentAngle = chassis.getYaw();
-        double error = targetAngle - currentAngle;
+        error = targetAngle - currentAngle;
         if (error > 180) {
             error -= 360;
         } else if (error < -180) {
@@ -50,8 +51,7 @@ public class TurnToAngle extends CommandBase {
     @Override
     public boolean isFinished() {
         double currentAngle = chassis.getYaw();
-        double error = targetAngle - currentAngle;
-
+        error = targetAngle - currentAngle;
         if (error > 180) {
             error -= 360;
         } else if (error < -180) {

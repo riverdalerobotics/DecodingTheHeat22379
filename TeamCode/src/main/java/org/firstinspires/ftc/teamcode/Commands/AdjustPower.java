@@ -26,10 +26,12 @@ public class AdjustPower extends CommandBase {
 
             double d = (CameraConstants.apriltagHeight-CameraConstants.height) /
                     Math.tan(CameraConstants.pitch + Math.toRadians(tx));
-
             double power = ShooterConstants.startingPower
                     - (battery.getVoltage()-12)*ShooterConstants.batteryModifier
                     + d*ShooterConstants.distanceModifier;
+            if (d > 300) {
+                power -= 0.02;
+            }
             shooter.setPower(power);
         }
     }

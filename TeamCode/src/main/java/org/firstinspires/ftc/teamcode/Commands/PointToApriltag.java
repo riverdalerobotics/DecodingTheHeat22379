@@ -12,6 +12,7 @@ public class PointToApriltag extends CommandBase {
     DriveSubsystem chassis;
     VisionSubsystem vision;
     int apriltag;
+    long timeLimit = 300000, endTime;
     DoubleSupplier forward;
     DoubleSupplier strafe;
 
@@ -25,21 +26,41 @@ public class PointToApriltag extends CommandBase {
         addRequirements(chassis);
     }
 
+    public PointToApriltag(DriveSubsystem chassis, VisionSubsystem limelight,
+                           int apriltag, long timeLimit) {
+        this.vision = limelight;
+        this.chassis = chassis;
+        this.apriltag = apriltag;
+        this.timeLimit = timeLimit;
+        addRequirements(chassis);
+    }
+
+
     @Override
     public void initialize() {
         vision.setApriltagPipeline();
+        endTime = System.currentTimeMillis() + timeLimit;
     }
 
     @Override
     public void execute() {
         double rotateSpeed = 0;
         if (vision.getApriltagTy(apriltag) != -1000) {
-            rotateSpeed = -vision.getApriltagTy(apriltag) * Constants.CameraConstants.P;
+            rotateSpeed = (-vision.getApriltagTy(apriltag)-1) * Constants.CameraConstants.P;
         }
-        double forwardSpeed = forward.getAsDouble();
-        double strafeSpeed = strafe.getAsDouble();
+        if (forward != null && strafe != null) {
+            double forwardSpeed = forward.getAsDouble();
+            double strafeSpeed = strafe.getAsDouble();
 
-        chassis.drive(forwardSpeed, rotateSpeed, strafeSpeed);
+            chassis.drive(forwardSpeed, rotateSpeed, strafeSpeed);
+        } else {
+            chassis.drive(0, rotateSpeed, 0);
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        return System.currentTimeMillis() > endTime;
     }
 
     @Override

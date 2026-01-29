@@ -33,8 +33,20 @@ public class ShooterSubsystem extends SubsystemBase {
         gatekeeper.setPosition(Constants.ShooterConstants.servoOpenPosition);
     }
 
-    public void faster() { power = Math.min(power + 0.05, 1); }
-    public void slower() { power = Math.max(power - 0.05, 0.5); }
+    public void faster() {
+        power = Math.min(power + 0.01, 1);
+        Constants.ShooterConstants.startingPower += 0.01;
+        if (isShooting) {
+            flyWheel.setPower(power);
+        }
+    }
+    public void slower() {
+        power = Math.max(power - 0.01, 0.5);
+        Constants.ShooterConstants.startingPower -= 0.01;
+        if (isShooting) {
+            flyWheel.setPower(power);
+        }
+    }
     public void setPower(double power) { this.power = Math.max(-1, Math.min(power, 1));}
 
     public void toggle() {

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Commands.AutoShoot2Balls;
+import org.firstinspires.ftc.teamcode.Commands.AutoShoot3Balls;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Constants.*;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
@@ -63,14 +63,14 @@ public class RedAuto extends LinearOpMode {
         intakeSubsystem = new IntakeSubsystem(intake);
         // End of initialization code
 
-        AutoShoot2Balls autoShoot2Balls = new AutoShoot2Balls(shooterSubsystem, chassis, intakeSubsystem);
+        AutoShoot3Balls autoShoot2Balls = new AutoShoot3Balls(shooterSubsystem, chassis, intakeSubsystem);
 
         // Reminds me of FLL
         waitForStart();
         autoShoot2Balls.runOpMode();
-        chassis.forwardByTicks(400);
-        chassis.rotateToAngle(-36);
-        chassis.strafeByTicks(-1500);
+        chassis.drive(0, 0.5, 0);
+        sleep(300);
+        chassis.strafeByTicks(-1300);
         intakeSubsystem.startIntake();
         chassis.forwardByTicks(1000);
         intakeSubsystem.stop();

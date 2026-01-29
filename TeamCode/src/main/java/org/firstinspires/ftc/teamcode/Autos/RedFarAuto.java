@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autos;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,15 +8,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Commands.AutoShoot3Balls;
+import org.firstinspires.ftc.teamcode.Commands.AdjustPower;
+import org.firstinspires.ftc.teamcode.Commands.PointToApriltag;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.OI;
+import org.firstinspires.ftc.teamcode.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.VisionSubsystem;
 
 @Autonomous
-public class BlueAuto extends LinearOpMode {
-
+public class RedFarAuto extends LinearOpMode {
     DcMotor shooter;
     DcMotor intake;
     DcMotor leftMotor, rightMotor;
@@ -23,8 +26,10 @@ public class BlueAuto extends LinearOpMode {
     DriveSubsystem chassis;
     ShooterSubsystem shooterSubsystem;
     IntakeSubsystem intakeSubsystem;
+    VisionSubsystem vision;
     Servo gatekeeper;
     IMU imu;
+    Limelight3A ll;
 
     public void runOpMode() throws InterruptedException {
         // Initialization code: put at the start of every runOpMode
@@ -58,21 +63,32 @@ public class BlueAuto extends LinearOpMode {
         }
 
         intake = hardwareMap.get(DcMotor.class, Constants.IntakeConstants.Intake);
-
         intakeSubsystem = new IntakeSubsystem(intake);
+
+        ll = hardwareMap.get(Limelight3A.class, Constants.Limelight);
+        vision = new VisionSubsystem(ll, telemetry);
+
         // End of initialization code
 
-        AutoShoot3Balls autoShoot2Balls = new AutoShoot3Balls(shooterSubsystem, chassis, intakeSubsystem);
+        PointToApriltag point = new PointToApriltag(chassis, vision, 24, 2000);
+        AdjustPower adjust = new AdjustPower(shooterSubsystem, vision, 24, hardwareMap.voltageSensor.iterator().next());
+        shooterSubsystem.shoot();
 
-        // Reminds me of FLL
         waitForStart();
-        autoShoot2Balls.runOpMode();
-        chassis.drive(0, -0.5, 0);
-        sleep(300);
-        chassis.strafeByTicks(-900);
-        intakeSubsystem.startIntake();
-        chassis.forwardByTicks(1000);
+        point.initialize();
+        while (!point.isFinished()) {
+            point.execute();
+            adjust.execute();
+        }
+        sleep(1000);
+        shooterSubsystem.openGate();
+        sleep(1000);
+        intakeSubsystem.intake.setPower(-0.8);
+        sleep(4000);
         intakeSubsystem.stop();
+        shooterSubsystem.closeGate();
+        chassis.drive(-0.5, 0, 0);
+        sleep(500);
         chassis.drive(0, 0, 0);
     }
 }

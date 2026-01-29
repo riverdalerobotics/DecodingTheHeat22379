@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.*;
 // h2 is ~30*2.54
 // a2 is just tx
 @TeleOp
-public class RobotContainer extends CommandOpMode {
+public class RedTeleop extends CommandOpMode {
     DriveSubsystem chassis;
     ShooterSubsystem shooter;
     IntakeSubsystem intakeSubsystem;
@@ -82,13 +82,12 @@ public class RobotContainer extends CommandOpMode {
     @Override
     public void initialize() {
         initializeSubsystems();
-
-        adjustPower = new AdjustPower(shooter, vision, 20, battery);
+        adjustPower = new AdjustPower(shooter, vision, 24, battery);
         toggleSlowMode = new ToggleSlowMode(chassis);
         lookToTag = new PointToApriltag(
                 chassis,
                 vision,
-                20,
+                24,
                 driveGamepad::getLeftY,
                 driveGamepad::getLeftX
         );

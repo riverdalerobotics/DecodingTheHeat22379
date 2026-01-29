@@ -6,23 +6,20 @@ import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.DriveSubsystem;
 
-import java.sql.Time;
-import java.util.Timer;
-
-public class AutoShoot2Balls {
+public class AutoShoot3Balls {
 
     private final ShooterSubsystem shooter;
     private final DriveSubsystem tank;
     private final IntakeSubsystem intake;
 
-    public AutoShoot2Balls(ShooterSubsystem shooter, DriveSubsystem drive, IntakeSubsystem intake) {
+    public AutoShoot3Balls(ShooterSubsystem shooter, DriveSubsystem drive, IntakeSubsystem intake) {
         this.shooter = shooter;
         this.tank = drive;
         this.intake = intake;
     }
 
     public void runOpMode() throws InterruptedException {
-        shooter.power = 1;
+        shooter.power = 0.62;
         tank.resetYaw();
         shooter.shoot();
         tank.forwardByTicks(-1100);
@@ -33,5 +30,6 @@ public class AutoShoot2Balls {
         sleep(3000);
         intake.stop();
         shooter.stopShoot();
+        shooter.closeGate();
     }
 }
