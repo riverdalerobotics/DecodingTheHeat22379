@@ -70,7 +70,7 @@ public class RedAuto extends LinearOpMode {
         autoShoot2Balls.runOpMode();
         chassis.drive(0, 0.5, 0);
         sleep(300);
-        chassis.strafeByTicks(-1300);
+        chassis.strafeByTicks(1800);
         intakeSubsystem.startIntake();
         chassis.forwardByTicks(1000);
         intakeSubsystem.stop();

@@ -8,6 +8,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -138,8 +139,10 @@ public class BlueTeleop extends CommandOpMode {
         // Do NOT put anything in here unless you know what you are doing
         // Except telemetry
         telemetry.addData("Power", shooter.power);
-        telemetry.addData("Yaw", chassis.getYaw());
-        telemetry.addData("Error", pointLeft.error);
+        telemetry.addData("Base", ShooterConstants.startingPower);
         telemetry.update();
+        if (shooter.isShooting) {
+            shooter.shoot();
+        }
     }
 }

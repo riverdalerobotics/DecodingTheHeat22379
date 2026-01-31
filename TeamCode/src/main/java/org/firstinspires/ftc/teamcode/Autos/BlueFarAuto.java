@@ -25,10 +25,8 @@ public class BlueFarAuto extends LinearOpMode {
     DriveSubsystem chassis;
     ShooterSubsystem shooterSubsystem;
     IntakeSubsystem intakeSubsystem;
-    VisionSubsystem vision;
     Servo gatekeeper;
     IMU imu;
-    Limelight3A ll;
 
     public void runOpMode() throws InterruptedException {
         // Initialization code: put at the start of every runOpMode
@@ -64,29 +62,21 @@ public class BlueFarAuto extends LinearOpMode {
         intake = hardwareMap.get(DcMotor.class, Constants.IntakeConstants.Intake);
         intakeSubsystem = new IntakeSubsystem(intake);
 
-        ll = hardwareMap.get(Limelight3A.class, Constants.Limelight);
-        vision = new VisionSubsystem(ll, telemetry);
 
         // End of initialization code
 
-        PointToApriltag point = new PointToApriltag(chassis, vision, 20, 2000);
-        AdjustPower adjust = new AdjustPower(shooterSubsystem, vision, 20, hardwareMap.voltageSensor.iterator().next());
+        shooterSubsystem.setPower(0.80);
         shooterSubsystem.shoot();
 
-        waitForStart();
-        point.initialize();
-        while (!point.isFinished()) {
-            point.execute();
-            adjust.execute();
-        }
-        sleep(1000);
+        sleep(3000);
         shooterSubsystem.openGate();
         sleep(1000);
         intakeSubsystem.intake.setPower(-0.8);
         sleep(4000);
         intakeSubsystem.stop();
         shooterSubsystem.closeGate();
-        chassis.drive(-0.5, 0, 0);
+        shooterSubsystem.stopShoot();
+        chassis.drive(0.5, 0, 0);
         sleep(500);
         chassis.drive(0, 0, 0);
     }

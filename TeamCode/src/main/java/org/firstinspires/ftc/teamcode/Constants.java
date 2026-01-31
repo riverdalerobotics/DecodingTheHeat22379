@@ -63,7 +63,7 @@ public class Constants {
         public static final double servoOpenPosition = 0.8;
         public static double distanceModifier = 0.0012;
         public static double batteryModifier = 0.01;
-        public static double startingPower = 0.55;
+        public static double startingPower = 0.52;
     }
 
     public static String Limelight = "limelight";

@@ -136,7 +136,11 @@ public class RedTeleop extends CommandOpMode {
         super.run();
         // Do NOT put anything in here unless you know what you are doing
         // Except telemetry
+
         telemetry.addData("Power", shooter.power);
         telemetry.update();
+        if (shooter.isShooting) {
+            shooter.shoot();
+        }
     }
 }
